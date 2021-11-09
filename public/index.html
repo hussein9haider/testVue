@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="csrf-token" content="{{ csrf_token() }}" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+  <title>SHASHTY</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link href="https://cdn.lineicons.com/3.0/lineicons.css" rel="stylesheet">
+
+  <style>
+    body {
+      direction: ltr;
+      text-align: left;
+      background-color: #000000;
+      overflow-x: hidden;
+    }
+
+    #wrapper {
+      padding-left: 0;
+      -webkit-transition: all 0.5s ease;
+      -moz-transition: all 0.5s ease;
+      -o-transition: all 0.5s ease;
+      transition: all 0.5s ease;
+    }
+
+    #wrapper.toggled {
+      padding-left: 200px;
+    }
+
+    #sidebar-wrapper {
+      z-index: 1000;
+      position: fixed;
+      left: 200px;
+      width: 0;
+      height: 100%;
+      margin-left: -200px;
+      overflow-y: auto;
+      background-color: #141414;
+      -webkit-transition: all 0.5s ease;
+      -moz-transition: all 0.5s ease;
+      -o-transition: all 0.5s ease;
+      transition: all 0.5s ease;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+      width: 200px;
+    }
+
+    #page-content-wrapper {
+      width: 100%;
+      position: absolute;
+      padding: 15px;
+    }
+
+    #wrapper.toggled #page-content-wrapper {
+      position: absolute;
+      margin-right: 0px;
+    }
+
+
+    /* Sidebar Styles */
+
+    .sidebar-nav {
+      position: absolute;
+      top: 0;
+      width: 200px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .sidebar-nav li {
+      text-indent: 0px;
+      line-height: 40px;
+    }
+
+    .sidebar-nav li a {
+      display: block;
+      text-decoration: none;
+      color: #999999;
+    }
+
+    .sidebar-nav li a:hover {
+      text-decoration: none;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .sidebar-nav li a:active,
+    .sidebar-nav li a:focus {
+      text-decoration: none;
+    }
+
+    .sidebar-nav>.sidebar-brand {
+      height: 65px;
+      font-size: 18px;
+      line-height: 60px;
+    }
+
+    .sidebar-nav>.sidebar-brand a {
+      color: #999999;
+    }
+
+    .sidebar-nav>.sidebar-brand a:hover {
+      color: #fff;
+      background: none;
+    }
+
+    @media(min-width:768px) {
+      #wrapper {
+        padding-left: 0;
+      }
+
+      #wrapper.toggled {
+        padding-left: 200px;
+      }
+
+      #sidebar-wrapper {
+        width: 0;
+      }
+
+      #wrapper.toggled #sidebar-wrapper {
+        width: 200px;
+      }
+
+      #page-content-wrapper {
+        padding: 20px;
+        position: relative;
+      }
+
+      #wrapper.toggled #page-content-wrapper {
+        position: relative;
+        margin-right: 0;
+      }
+    }
+
+    .sidebar-brand {
+      margin-bottom: 60px;
+    }
+
+    .sidebar-nav li a {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #fff;
+    }
+
+    .sidebar-nav li .active {
+      background-color: #CE1212;
+      color: #fff;
+    }
+
+    .sidebar-nav li .active:hover {
+      background-color: #CE1212;
+      color: #fff;
+    }
+
+    .move-back {
+      position: relative;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      height: 300px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+
+
+    .move-box {
+      background-color: #fff;
+      text-decoration: none !important;
+    }
+
+    .move-box:hover {
+      background-color: #fff;
+      padding: 10px;
+    }
+
+    .move-back-400 {
+      position: relative;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      height: 400px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .move-name {
+      text-align: center;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: #CE1212;
+      display: none;
+      text-decoration: none !important;
+
+    }
+
+    .move-box:hover .move-name {
+      display: block;
+    }
+
+    .move-box:hover .move-back-400 {
+      height: 348px;
+    }
+
+    .imd-rate {
+      position: absolute;
+      font-size: 14px;
+      color: #fff;
+      top: 7px;
+      left: 32px;
+    }
+
+    /*
+			Search *******************
+		*/
+
+    .search-form-box .form-control-lg {
+      padding: 0.8rem 1rem !important;
+    }
+
+    .search-form-box .input-group-text {
+      background-color: #141414;
+      border-color: #141414;
+      font-size: 25px;
+      color: #fff;
+    }
+
+    .search-form-box input {
+      background-color: #141414 !important;
+      border-color: #141414 !important;
+      border: none;
+      color: #fff;
+    }
+
+    .search-form-box .form-control:focus {
+      background-color: #141414 !important;
+      border-color: #141414 !important;
+      border: none;
+      box-shadow: none;
+      color: #fff;
+    }
+
+    .search-form-box .form-control::placeholder {
+      color: #fff;
+
+    }
+
+    /*
+			Category Page
+		*/
+
+    .category-back {
+      position: relative;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      height: 220px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+
+
+
+    .single-move {
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+
+    }
+
+    .single-move-image {
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .box-overly {
+      position: absolute;
+      top: 0%;
+      left: 0%;
+      background-color: rgba(0, 0, 0, 0.6);
+      width: 100%;
+      height: 100%;
+    }
+
+    .category-list {
+      list-style: none;
+      padding: 0%;
+
+    }
+
+    .category-list li {
+      background-color: rgba(0, 0, 0, 0.2);
+      color: #fff;
+      display: inline-block;
+      padding: 5px 25px;
+      margin-right: 10px;
+    }
+
+    .over-list li {
+      color: #fff;
+      display: inline-block;
+      padding: 0px 0px;
+      background-color: transparent;
+      border-right: 1px solid #fff;
+      padding-right: 4px;
+      padding-left: 4px;
+
+
+    }
+
+    .watch-button {
+      background-color: #CE1212 !important;
+      color: #fff !important;
+      padding: 5px 60px !important;
+      border-color: #CE1212;
+      font-size: 24px;
+    }
+  </style>
+</head>
+
+<body>
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+        Please enable it to continue.</strong>
+  </noscript>
+  <div id="app"></div>
+  <!-- built files will be auto injected -->
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+  <!-- Menu Toggle Script -->
+  <script>
+    $(function () {
+      $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+      });
+
+      $(window).resize(function (e) {
+        if ($(window).width() <= 768) {
+          $("#wrapper").removeClass("toggled");
+        } else {
+          $("#wrapper").addClass("toggled");
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
